@@ -1,10 +1,10 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { Document, Schema } from "mongoose"
 
-
-export interface IUser {
+export interface IUser extends Document {
     email: string;
-    userName: string;
+    username: string;
     memberShip: string;
+    refreshToken: string;
     role: 'user'|'admin';
     password: string
 }

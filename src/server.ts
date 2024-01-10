@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 // Load configuration
@@ -8,16 +9,21 @@ dotenv.config({ path: ".env" }); // load env configuration
 const app: Express = express();
 const port = process.env.PORT || 8080;
 const host = process.env.HOST
+mongoose.connect(process.env.MONGODB_URI ?? '');
+const database = mongoose.connection;
+
 
 // Route List
-import routerUser from "./routes/user";
+import authUser from "./routes/auth";
 
-app.use("/users", routerUser)
+app.use("/v1/auth", authUser)
+
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Crypto bot Server");
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+database.once('connected', () => {
+  console.log('Connected to MongoDB');
+  app.listen(port, () => console.log(`Server running on port ${port}`));
 });
