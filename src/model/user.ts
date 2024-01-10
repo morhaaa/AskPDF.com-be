@@ -1,7 +1,14 @@
-import mongoose from "mongoose"
-import bcrypt from "bcryptjs"   
+import mongoose, { Schema } from "mongoose"
 
-const { Schema } = mongoose;
+
+export interface IUser {
+    email: string;
+    userName: string;
+    memberShip: string;
+    role: 'user'|'admin';
+    password: string
+}
+
 const userSchema = new Schema({
     email: { 
         type: String, 
@@ -31,6 +38,6 @@ const userSchema = new Schema({
     }
 });
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose.models.User<IUser> || mongoose.model<IUser>("User", userSchema);
 
 export default User;
