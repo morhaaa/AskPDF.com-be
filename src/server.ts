@@ -15,11 +15,13 @@ const database = mongoose.connection;
 
 
 // Route List
+import authUser from "./routes/auth";
+import registerUser from "./routes/register"
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Crypto bot Server");
 });
-import authUser from "./routes/auth";
-
+app.use('v1/register', registerUser);
 app.use("/v1/auth", authUser)
 app.use(verifyJWT);
 
