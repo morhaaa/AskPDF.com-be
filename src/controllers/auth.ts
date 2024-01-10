@@ -21,27 +21,19 @@ class AuthController {
       const authenticatedUser = await this.authService.getUser(username, password);
 
       if (authenticatedUser) {
-        const accessToken = jwt.sign(
-          { UserInfo: { username: authenticatedUser.username } },
-          process.env.ACCESS_TOKEN_SECRET ?? '',
-          { expiresIn: '5min' }
-        );
-
-        const refreshToken = jwt.sign(
+        const token = jwt.sign(
           { username: authenticatedUser.username },
-          process.env.REFRESH_TOKEN_SECRET ?? '',
-          { expiresIn: '1d' }
-        );
+            process.env.JWT_SECRET_KEY || '',
+          { expiresIn: '1d' })
 
-        //Save the refresh token
-        authenticatedUser.refreshToken = refreshToken;
-        const result = await authenticatedUser.save();
-        console.log(result);
-
-        //Save a cookie
-        res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 });
-
-        res.json({ accessToken });
+        //JWT as Cookie
+        res.cookie('jwt', token, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 });
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: "login success",
+            token: token,
+          });
       } else {
         res.sendStatus(401);
       }

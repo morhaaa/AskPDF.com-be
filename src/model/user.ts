@@ -4,7 +4,6 @@ export interface IUser extends Document {
     email: string;
     username: string;
     memberShip: string;
-    refreshToken: string;
     role: 'user'|'admin';
     password: string
 }
