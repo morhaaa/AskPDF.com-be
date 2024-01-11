@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import User, { IUser } from "../model/user";
 
 export class AuthService {
-  public async getUser(username: string, password: string): Promise<IUser | null> {
+  public async getUser(email: string, password: string): Promise<IUser | null> {
     try {
-      const user = await User.findOne({ username }).exec();
+      const user = await User.findOne({ email }).exec();
 
       if (!user) {
         return null;
