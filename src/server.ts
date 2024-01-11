@@ -15,7 +15,12 @@ mongoose.connect(process.env.MONGODB_URI ?? "");
 const database = mongoose.connection;
 
 //Middleware
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -23,10 +28,10 @@ app.use(express.urlencoded({ extended: false }));
 import authUser from "./routes/auth";
 import registerUser from "./routes/register";
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_: Request, res: Response) => {
   res.send("Crypto bot Server");
 });
-app.use("v1/register", registerUser);
+app.use("/v1/register", registerUser);
 app.use("/v1/auth", authUser);
 app.use(verifyJWT);
 
