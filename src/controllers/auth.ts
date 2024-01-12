@@ -39,7 +39,15 @@ class AuthController {
           success: true,
           message: "login success",
           token: token,
+          user: {
+            username: authenticatedUser.username,
+            email: authenticatedUser.email,
+            memberShip: authenticatedUser.memberShip,
+            role: authenticatedUser.role,
+          },
         });
+
+        console.log("okk");
       } else {
         res.sendStatus(401);
       }
