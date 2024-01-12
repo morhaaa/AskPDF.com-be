@@ -46,8 +46,6 @@ class AuthController {
             role: authenticatedUser.role,
           },
         });
-
-        console.log("okk");
       } else {
         res.sendStatus(401);
       }
