@@ -2,27 +2,17 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 export default function verifyJWT(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization || req.headers.Authorization;
+  const token = req.cookies.token;
 
-  if (!authHeader) {
-    return res.sendStatus(401);
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const token = Array.isArray(authHeader) ? authHeader[0] : authHeader;
-
-  if (!token || !token.startsWith('Bearer ')) {
-    return res.sendStatus(401);
-  }
-
-  const tokenValue = token.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(tokenValue, (process.env as any).JWT_SECRET_KEY);
+  jwt.verify(token, (process.env as any).JWT_SECRET_KEY, (err: any, decoded: any) => {
+    if (err) {
+      return res.status(401).json({ message: 'Token invalid' });
+    }
     (req as any).user = decoded;
     next();
-  } catch (err) {
-    console.error(err);
-    return res.status(401).json({ success: false, message: "Invalid token" });
-  }
-
+  });
 }
