@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import verifyJWT from "./middleware/verifyJWT";
-
+import cookieParser from "cookie-parser"
 // Load configuration
 dotenv.config({ path: ".env" }); // load env configuration
 
@@ -21,6 +21,7 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

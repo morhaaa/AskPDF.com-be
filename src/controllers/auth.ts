@@ -23,8 +23,7 @@ class AuthController {
       if (authenticatedUser) {
         const token = jwt.sign(
           { user_id: authenticatedUser._id },
-          process.env.JWT_SECRET_KEY || "",
-          { expiresIn: "1d" }
+          process.env.JWT_SECRET_KEY || ""
         );
 
         //JWT as Cookie
@@ -57,9 +56,9 @@ class AuthController {
 
   public getUserByToken = async (req: Request, res: Response): Promise<void> => {
     try {
-      const token = req.cookies.token;
+      const token = req.cookies.jwt_token
 
-      console.log(token)
+      console.log(req.cookies.jwt_token)
 
       if (!token) {
        res.status(401).json({ message: 'Unauthorized' });
@@ -67,11 +66,12 @@ class AuthController {
       }
 
       jwt.verify(token, process.env.JWT_SECRET_KEY as string, async (err: any, decoded: any) => {
+
         if (err) {
           return res.status(401).json({ message: 'Token invalid' });
         }
 
-        const user = await this.authService.getUserById( decoded._id);
+        const user = await this.authService.getUserById( decoded.user_id);
 
         if (!user) {
           return res.status(401).json({ message: 'User not found' });
