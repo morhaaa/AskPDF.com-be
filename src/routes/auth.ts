@@ -4,6 +4,7 @@ import AuthController from '../controllers/auth';
 const router = Router();
 const controller = new AuthController()
 
-router.post('/', (req, res) => controller.handleLogin(req, res));
+router.post('/login', (req, res) => controller.handleLogin(req, res));
+router.post('/', (req, res) => controller.getUserByToken(req, res));
 
 export default router;

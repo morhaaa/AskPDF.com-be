@@ -17,4 +17,18 @@ export class AuthService {
       throw error;
     }
   }
+
+  public async getUserById(_id:string): Promise<IUser | null> {
+    try {
+      const user = await User.findOne({ _id }).exec();
+
+      if (!user) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
