@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 // Route List
 import authUser from "./routes/auth";
 import registerUser from "./routes/register";
+import pdf from "./routes/pdf";
 
 app.get("/", (_: Request, res: Response) => {
   res.send("Crypto bot Server");
@@ -35,6 +36,7 @@ app.get("/", (_: Request, res: Response) => {
 app.use("/v1/register", registerUser);
 app.use("/v1/auth", authUser);
 app.use(verifyJWT);
+app.use("/v1/pdf",pdf)
 
 //Server
 database.once("connected", () => {
