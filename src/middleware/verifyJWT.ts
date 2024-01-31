@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 export default function verifyJWT(req: Request, res: Response, next: NextFunction) {
-  const token = req.cookies.token;
+  const token = req.cookies.jwt_token;
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
@@ -12,6 +12,7 @@ export default function verifyJWT(req: Request, res: Response, next: NextFunctio
     if (err) {
       return res.status(401).json({ message: 'Token invalid' });
     }
+
     (req as any).user = decoded;
     next();
   });
