@@ -5,12 +5,14 @@ export interface IFile extends Document {
     url: string;
     createAt: Date;
     updateAt: Date;
+    size: number;
     userId: mongoose.Types.ObjectId;
 }
 
 const fileSchema = new Schema<IFile>({
     name: { type: String, required: true },
     url: { type: String, required: true },
+    size: { type: Number, required: true },
     createAt: { type: Date, required: true },
     updateAt: { type: Date, required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }

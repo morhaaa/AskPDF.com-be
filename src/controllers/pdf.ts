@@ -27,6 +27,7 @@ class PdfController {
     //Get all file of a single user
     public getAllFiles = async (req: Request, res: Response): Promise<void> => {
       try {
+        console.log('ciaoo')
         const token = req.cookies.jwt_token;
   
         if (!token) {
@@ -92,6 +93,7 @@ class PdfController {
         const fileData = {
             name: body.name,
             url: body.url,
+            size: body.size,
             createAt: body.createAt,
             updateAt:  body.updateAt,
             userId: new ObjectId(user_id)
