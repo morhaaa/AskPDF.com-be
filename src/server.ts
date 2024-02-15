@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import verifyJWT from "./middleware/verifyJWT";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 // Load configuration
 dotenv.config({ path: ".env" }); // load env configuration
 
@@ -21,7 +21,7 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -29,6 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 import authUser from "./routes/auth";
 import registerUser from "./routes/register";
 import pdf from "./routes/pdf";
+import chat from "./routes/chat";
 
 app.get("/", (_: Request, res: Response) => {
   res.send("Crypto bot Server");
@@ -36,7 +37,8 @@ app.get("/", (_: Request, res: Response) => {
 app.use("/v1/register", registerUser);
 app.use("/v1/auth", authUser);
 app.use(verifyJWT);
-app.use("/v1/pdf",pdf)
+app.use("/v1/pdf", pdf);
+app.use("/v1/chat", chat);
 
 //Server
 database.once("connected", () => {
