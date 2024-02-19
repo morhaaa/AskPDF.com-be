@@ -76,6 +76,7 @@ class ChatController {
 
   public async streamResponse(req: Request, res: Response): Promise<void> {
     const { message, file_id } = req.body;
+    const io = req.app.get("socket.io");
     const token = req.cookies.jwt_token;
     const user_id = await this.getUserId(token);
     const pdf = await this.getPdf(file_id);
@@ -169,7 +170,7 @@ class ChatController {
       for await (const part of stream) {
         const chunk = part.choices[0]?.delta?.content || "";
         openAIResponse += chunk;
-        res.write(chunk);
+        io.emit("openAIResponseStarted", chunk);
       }
 
       //Save openAo response
@@ -181,6 +182,7 @@ class ChatController {
         fileId: new ObjectId(file_id),
       };
 
+      io.emit("openAIResponseComplete");
       await this.messageService.createMessage(streamedMessage);
 
       res.end();
