@@ -214,6 +214,28 @@ class ChatController {
         .json({ message: "Internal Server Error", success: false });
     }
   }
+
+  public async getOldMessages(req: Request, res: Response): Promise<void> {
+    try {
+      const { file_id, messageDate } = req.body;
+      const messages = await this.messageService.loadOldMessages(
+        file_id,
+        messageDate
+      );
+
+      res.status(200).json({
+        status: 200,
+        success: true,
+        message: "Success",
+        messages: messages,
+      });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Internal Server Error", success: false });
+    }
+  }
 }
 
 export default ChatController;

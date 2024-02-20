@@ -6,10 +6,11 @@ export class MessageService {
       const prevMessages = await MessageModel.find({
         fileId: fileId,
       })
-        .sort({ createdAt: "asc" })
-        .limit(6);
+        .sort({ createdAt: -1 })
+        .limit(4);
 
-      return prevMessages;
+      const sortedMessages = prevMessages.reverse();
+      return sortedMessages;
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -22,6 +23,28 @@ export class MessageService {
       return createdMessage;
     } catch (error) {
       throw new Error(`Error creating message: ${error}`);
+    }
+  }
+
+  public async loadOldMessages(
+    fileId: string,
+    createdAt: Date
+  ): Promise<IMessage[]> {
+    try {
+      const pageSize = 8;
+
+      const prevMessages = await MessageModel.find({
+        fileId: fileId,
+        createdAt: { $lt: createdAt },
+      })
+        .sort({ createdAt: -1 })
+        .limit(pageSize);
+
+      const sortedMessages = prevMessages.reverse();
+      return sortedMessages;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
     }
   }
 }
