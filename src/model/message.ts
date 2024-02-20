@@ -11,7 +11,7 @@ export interface IMessage extends Document {
 const MessageSchema: Schema = new Schema({
   text: { type: String, required: true },
   isUserMessage: { type: Boolean, required: true },
-  updatedAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   fileId: { type: Schema.Types.ObjectId, ref: "File", required: true },
 });
