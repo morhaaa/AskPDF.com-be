@@ -7,7 +7,7 @@ export class MessageService {
         fileId: fileId,
       })
         .sort({ createdAt: -1 })
-        .limit(4);
+        .limit(6);
 
       const sortedMessages = prevMessages.reverse();
       return sortedMessages;
@@ -41,7 +41,25 @@ export class MessageService {
         .limit(pageSize);
 
       const sortedMessages = prevMessages.reverse();
+
       return sortedMessages;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  }
+
+  public async checkIfMessagesAvailable(
+    fileId: string,
+    createdAt: Date
+  ): Promise<boolean> {
+    try {
+      const prevMessagesCount = await MessageModel.countDocuments({
+        fileId: fileId,
+        createdAt: { $lt: createdAt },
+      });
+
+      return prevMessagesCount > 0;
     } catch (error) {
       console.error("Error:", error);
       throw error;
